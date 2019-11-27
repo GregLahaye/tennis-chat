@@ -34,15 +34,28 @@
                 const socket = io();
 
                 $('form').submit(function(e) {
-                    e.preventDefault();
-                    if ($('input').val()) {
-                        socket.emit('message', $('input').val());
-                    }
-                    $('input').val('');
+                    const message = $('input').val();
 
-                    if (Notification.permission !== 'granted') {
-                        Notification.requestPermission();
-                    };
+                    e.preventDefault();
+
+                    if (message) {
+                        $('input').val('');
+
+                        $('ul').prepend(
+                            $('<li>')
+                            .text('you: ' + message)
+                            .addClass('list-group-item')
+                            .css('background-color', '#eee')
+                        );
+
+                        $('ul li:gt(10)').hide();
+
+                        socket.emit('message', message);
+
+                        if (Notification.permission !== 'granted') {
+                            Notification.requestPermission();
+                        };
+                    }
 
                     $('input').focus();
                 });
@@ -54,6 +67,10 @@
                         .addClass('list-group-item')
                         .css('font-weight', 'bold')
                     );
+
+                    $('ul li:gt(10)').hide();
+
+                    new Notification(message);
                 });
 
                 socket.on('message', function(username, color, message) {
