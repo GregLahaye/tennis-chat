@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Tennis Chat</title>
+        <link rel="stylesheet" type="text/css" href="/css/style.css">
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.0/css/bootstrap.min.css" integrity="sha384-SI27wrMjH3ZZ89r4o+fGIJtnzkAnFs3E4qz9DIYioCQ5l9Rd/7UAa8DHcaL8jkWt" crossorigin="anonymous">
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+            <a class="navbar-brand" href="#">
+                <img src="/img/tennis-ball.svg" width="30" height="30">
+                Tennis Chat
+            </a>
+        </nav>
+
+        <main role="main" class="container">
+            <div>
+                <form action="#">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Send a message">
+                        <button type="submit" class="btn btn-primary">Chat</button>
+                    </div>
+                </form>
+                <ul class="list-group">
+                </ul>
+            </div>
+        </main>
+
+        <script src="/socket.io/socket.io.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script>
+            $(function() {
+                const socket = io();
+
+                $('form').submit(function(e) {
+                    e.preventDefault();
+                    if ($('input').val()) {
+                        socket.emit('message', $('input').val());
+                    }
+                    $('input').val('');
+
+                    if (Notification.permission !== 'granted') {
+                        Notification.requestPermission();
+                    };
+
+                    $('input').focus();
+                });
+
+                socket.on('announcement', function(message) {
+                    $('ul').prepend(
+                        $('<li>')
+                        .text(message)
+                        .addClass('list-group-item')
+                        .css('font-weight', 'bold')
+                    );
+                });
+
+                socket.on('message', function(username, color, message) {
+                    $('ul').prepend(
+                        $('<li>')
+                        .text(username + ': ' + message)
+                        .addClass('list-group-item')
+                        .css('background-color', color)
+                    );
+
+                    $('ul li:gt(10)').hide();
+
+                    new Notification(username + ': ' + message);
+                });
+
+                $('input').focus();
+            });
+        </script>
+    </body>
+</html>
+

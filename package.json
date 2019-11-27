@@ -1,0 +1,28 @@
+{
+  "name": "tennis-chat",
+  "version": "0.0.1",
+  "description": "real-time tennis chat application",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/GregLahaye/tennis-chat.git"
+  },
+  "author": "Greg Lahaye",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/GregLahaye/tennis-chat/issues"
+  },
+  "homepage": "https://github.com/GregLahaye/tennis-chat#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "socket.io": "^2.3.0"
+  },
+  "devDependencies": {
+    "eslint": "^6.7.1",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.18.2"
+  }
+}
